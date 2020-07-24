@@ -3,26 +3,28 @@ package com.uu.set.numberplace
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.ads.*
 import com.uu.set.numberplace.logic.Calculate
 import com.uu.set.numberplace.model.Board
-import java.lang.StringBuilder
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
 class FirstFragment : Fragment() {
+    lateinit var mAdView: AdView
+    private val packageName = activity?.packageName
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_first, container, false)
@@ -36,6 +38,17 @@ class FirstFragment : Fragment() {
             val board = calcBoard(view)
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
+        initAdd(view)
+    }
+
+    private fun initAdd(view: View) {
+        MobileAds.initialize(
+            context
+        ) { }
+        mAdView = view.findViewById(R.id.adView)
+        RequestConfiguration.Builder().setTestDeviceIds(listOf("BF25A5CF4D2AAA87F9987110F45F4509"))
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -56,11 +69,11 @@ class FirstFragment : Fragment() {
         val rows = mutableListOf<MutableList<Int>>()
         for (row in 0..8) {
             val cols = mutableListOf<Int>()
-            for (col in 0.. 8) {
+            for (col in 0..8) {
                 val viewStr = StringBuilder().append("cell").append(row).append(col).toString()
                 val viewId = resources.getIdentifier(viewStr, "id", activity?.packageName)
                 val text = view.findViewById<TextView>(viewId).text.toString()
-                val num = if(text.isEmpty()) 0 else Integer.parseInt(text)
+                val num = if (text.isEmpty()) 0 else Integer.parseInt(text)
                 cols.add(num)
             }
             rows.add(cols)

@@ -11,16 +11,14 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.ads.*
 import com.uu.set.numberplace.logic.Calculate
 import com.uu.set.numberplace.model.Board
+import com.uu.set.numberplace.view.Ad
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
 class FirstFragment : Fragment() {
-    lateinit var mAdView: AdView
-    private val packageName = activity?.packageName
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,19 +34,11 @@ class FirstFragment : Fragment() {
 
         view.findViewById<Button>(R.id.start_calc).setOnClickListener {
             val board = calcBoard(view)
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            val bundle = Bundle()
+            bundle.putSerializable("board", board)
+            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment, bundle)
         }
-        initAdd(view)
-    }
-
-    private fun initAdd(view: View) {
-        MobileAds.initialize(
-            context
-        ) { }
-        mAdView = view.findViewById(R.id.adView)
-        RequestConfiguration.Builder().setTestDeviceIds(listOf("BF25A5CF4D2AAA87F9987110F45F4509"))
-        val adRequest = AdRequest.Builder().build()
-        mAdView.loadAd(adRequest)
+        Ad.loadAd(view)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -57,10 +47,14 @@ class FirstFragment : Fragment() {
         val board = Board(getViewCells(view))
         // boardを生成する
         // 回答結果を得る
+        board.resolveStatus = "解析完了"
         try {
             Calculate().calc(board)
         } catch (e: MyException) {
-            e.message?.let { Log.d(activity?.packageName, it) }
+            e.message?.let {
+                Log.d(activity?.packageName, it)
+                board.resolveStatus = it
+            }
         }
         return board
     }

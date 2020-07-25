@@ -2,13 +2,15 @@ package com.uu.set.numberplace.model
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import java.io.Serializable
 import java.util.*
 
 /**
  * 盤面全体の情報モデル
  */
-class Board(private val data: List<List<Int>>) {
+class Board(private val data: List<List<Int>>) : Serializable {
     val rows: MutableList<MutableList<Cell>> = mutableListOf()
+    var resolveStatus: String = ""
 
     init {
         data.forEachIndexed { row, list ->
@@ -39,7 +41,8 @@ class Board(private val data: List<List<Int>>) {
         for (row in 0..8) {
             val colJoiner = StringJoiner("|", "|", "|")
             for (col in 0..8) {
-                val resolve = if (rows[row][col].resolve == 0) " " else rows[row][col].resolve.toString()
+                val resolve =
+                    if (rows[row][col].resolve == 0) " " else rows[row][col].resolve.toString()
                 colJoiner.add(resolve)
             }
             rowJoiner.add(colJoiner.toString())

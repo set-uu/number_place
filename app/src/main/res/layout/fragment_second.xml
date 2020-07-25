@@ -6,20 +6,35 @@
     android:layout_height="match_parent"
     tools:context=".SecondFragment">
 
-    <include layout="@layout/board" />
+    <include
+        android:id="@+id/include"
+        layout="@layout/board" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/resolve_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/return_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include" />
 
     <Button
         android:id="@+id/return_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="208dp"
         android:text="@string/previous"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/include3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/board"
+        app:layout_constraintTop_toBottomOf="@+id/resolve_status"
         app:layout_constraintVertical_bias="0.16" />
 
-    <include layout="@layout/ad" />
+    <include
+        android:id="@+id/include3"
+        layout="@layout/ad"
+        tools:layout_editor_absoluteY="682dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

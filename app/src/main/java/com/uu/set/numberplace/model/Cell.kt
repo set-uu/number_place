@@ -19,4 +19,10 @@ class Cell(val row: Int, val col: Int, var resolve: Int) :Serializable {
 
     }
 
+    fun resolveString() :String {
+        if (resolve <= 0 || resolve > 9) {
+            return ""
+        }
+        return resolve.toString()
+    }
 }

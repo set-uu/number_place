@@ -15,20 +15,22 @@ class Calculate {
         }
         val status: ResolveStatus
         while (true) {
-            var isChanged = false
+            // この周で変更があったか
+            board.isChange = false
+
             // 3*3のマスに入るものはあるか
             BlockPositions.values()
-                .forEach { blockPositions -> isChanged = isChanged || block(board, blockPositions) }
+                .forEach { blockPositions -> block(board, blockPositions) }
             // 1マス単位で入るものはあるか
             for (x in 0..8) {
-                for (y in 0..8) isChanged = isChanged || oneCell(board, board.rows[x][y])
+                for (y in 0..8) oneCell(board, board.rows[x][y])
             }
 
             if (board.allResolve()) {
                 status = ResolveStatus.Resolved
                 break
             }
-            if (!isChanged) {
+            if (!board.isChange) {
                 status = ResolveStatus.NotChange
                 break
             }
@@ -40,21 +42,19 @@ class Calculate {
     /**
      * 一つのマスに入りうる数字が一つだけのときはその値を入れる
      */
-    private fun oneCell(board: Board, cell: Cell): Boolean {
-        if (cell.resolve != 0) return false
+    private fun oneCell(board: Board, cell: Cell) {
+        if (cell.resolve != 0) return
         if (cell.candidateList.size == 1) {
             cell.resolve = cell.candidateList.first()
             updatedBoard(board, cell)
-            return true
+            board.isChange = true
         }
-        return false
     }
 
     /**
      * 3*3のブロックに入る値を確認する
      */
-    private fun block(board: Board, block: BlockPositions): Boolean {
-        var isChange = false
+    private fun block(board: Board, block: BlockPositions) {
         val resolvedList = mutableListOf<Int>()
         // 入っていない数字が入る可能性のある場所を取得
         val unResolvedCell = mutableListOf<Cell>()
@@ -82,7 +82,7 @@ class Calculate {
                         val cell = intoCellList.first()
                         cell.resolve = num
                         updatedBoard(board, cell)
-                        isChange = true
+                        board.isChange = true
                     }
                     2, 3 -> {
                         var row = 0
@@ -101,7 +101,7 @@ class Calculate {
                         // 2または3箇所で直線的に並んでいる場合
                         if (row != -1) {
                             // その直線の他のブロックにはその数字は入らないことにする
-                            isChange = isChange || clearOtherBlockRow(
+                            clearOtherBlockRow(
                                 board,
                                 intoCellList.first(),
                                 block,
@@ -110,7 +110,7 @@ class Calculate {
                         }
                         if (col != -1) {
                             // その直線の他のブロックにはその数字は入らないことにする
-                            isChange = isChange || clearOtherBlockCol(
+                            clearOtherBlockCol(
                                 board,
                                 intoCellList.first(),
                                 block,
@@ -121,7 +121,6 @@ class Calculate {
                 }
             }
         }
-        return isChange
     }
 
     private fun clearOtherBlockRow(
@@ -129,17 +128,15 @@ class Calculate {
         cell: Cell,
         block: BlockPositions,
         num: Int
-    ): Boolean {
+    ) {
         // cell と同じrowかつ別ブロックから対象の数字を取り除く
-        var isChange = false
         val row = cell.row
         for (col in 0..8) {
             if (col < block.col || col >= block.col + 3) {
-                isChange = isChange || board.rows[row][col].candidateList.remove(num)
+                val isChange = board.rows[row][col].candidateList.remove(num)
+                board.isChange = board.isChange || isChange
             }
         }
-
-        return isChange
     }
 
     private fun clearOtherBlockCol(
@@ -147,16 +144,15 @@ class Calculate {
         cell: Cell,
         block: BlockPositions,
         num: Int
-    ): Boolean {
+    ) {
         // cell と同じcolかつ別ブロックから対象の数字を取り除く
-        var isChange = false
         val col = cell.col
         for (row in 0..8) {
             if (row < block.row || row >= block.row + 3) {
-                isChange = isChange || board.rows[row][col].candidateList.remove(num)
+                val isChange = board.rows[row][col].candidateList.remove(num)
+                board.isChange = board.isChange || isChange
             }
         }
-        return isChange
     }
 
     /**

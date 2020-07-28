@@ -9,6 +9,7 @@ import java.util.*
  * 盤面全体の情報モデル
  */
 class Board(private val data: List<List<Int>>) : Serializable {
+    var isChange :Boolean = false
     val rows: MutableList<MutableList<Cell>> = mutableListOf()
     var resolveStatus: String = ""
 

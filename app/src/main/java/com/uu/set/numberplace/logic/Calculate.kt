@@ -18,9 +18,13 @@ class Calculate {
             // この周で変更があったか
             board.isChange = false
 
+            // ラインに一箇所だけ入る数字があるか
+            oneLine(board)
+
             // 3*3のマスに入るものはあるか
             BlockPositions.values()
                 .forEach { blockPositions -> block(board, blockPositions) }
+
             // 1マス単位で入るものはあるか
             for (x in 0..8) {
                 for (y in 0..8) oneCell(board, board.rows[x][y])
@@ -39,13 +43,66 @@ class Calculate {
         return board
     }
 
+    private fun oneLine(board: Board) {
+        for (num in 1..9) {
+            oneRow(board, num)
+            oneCol(board, num)
+        }
+    }
+
+    private fun oneRow(board: Board, num: Int) {
+        // 指定の数字が行にあるか？
+        for (row in 0..8) {
+            val targetColList = mutableListOf<Int>()
+            for (col in 0..8) {
+                val cell = board.rows[row][col]
+                if(cell.resolve == num) {
+                    targetColList.clear()
+                    break
+                }
+                if (cell.candidateList.contains(num)) {
+                    targetColList.add(col)
+                }
+            }
+            if (targetColList.size == 1) {
+                val cell = board.rows[row][targetColList[0]]
+                cell.updateResolve(num)
+                updatedBoard(board, cell)
+                board.isChange = true
+            }
+        }
+    }
+
+    private fun oneCol(board: Board, num: Int) {
+        // 指定の数字が列にあるか？
+        for (col in 0..8) {
+            val targetRowList = mutableListOf<Int>()
+            for (row in 0..8) {
+                val cell = board.rows[row][col]
+                if(cell.resolve == num) {
+                    targetRowList.clear()
+                    break
+                }
+                if (cell.candidateList.contains(num)) {
+                    targetRowList.add(row)
+                }
+            }
+            if (targetRowList.size == 1) {
+                val cell = board.rows[targetRowList[0]][col]
+                cell.updateResolve(num)
+                updatedBoard(board, cell)
+                board.isChange = true
+            }
+        }
+    }
+
     /**
      * 一つのマスに入りうる数字が一つだけのときはその値を入れる
      */
     private fun oneCell(board: Board, cell: Cell) {
         if (cell.resolve != 0) return
         if (cell.candidateList.size == 1) {
-            cell.resolve = cell.candidateList.first()
+            cell.updateResolve(cell.candidateList.first())
             updatedBoard(board, cell)
             board.isChange = true
         }
@@ -80,7 +137,7 @@ class Calculate {
                     1 -> {
                         // 可能性のある場所が1箇所だけなら当てはめる
                         val cell = intoCellList.first()
-                        cell.resolve = num
+                        cell.updateResolve(num)
                         updatedBoard(board, cell)
                         board.isChange = true
                     }

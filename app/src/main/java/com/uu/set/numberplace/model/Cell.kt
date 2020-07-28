@@ -25,4 +25,9 @@ class Cell(val row: Int, val col: Int, var resolve: Int) :Serializable {
         }
         return resolve.toString()
     }
+
+    fun updateResolve(resolve: Int) {
+        this.resolve = resolve
+        this.candidateList.clear()
+    }
 }

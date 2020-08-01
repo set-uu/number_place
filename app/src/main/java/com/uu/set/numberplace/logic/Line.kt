@@ -2,7 +2,7 @@ package com.uu.set.numberplace.logic
 
 import com.uu.set.numberplace.model.Board
 
-fun oneLine(board: Board) {
+fun lines(board: Board) {
     for (num in 1..9) {
         oneRow(board, num)
         oneCol(board, num)

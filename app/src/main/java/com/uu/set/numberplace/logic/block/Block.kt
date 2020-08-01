@@ -81,8 +81,7 @@ private fun clearOtherBlockRow(
     val row = cell.row
     for (col in 0..8) {
         if (col < block.col || col >= block.col + 3) {
-            val isChange = board.rows[row][col].candidateList.remove(num)
-            board.isChanged = board.isChanged || isChange
+            board.rows[row][col].removeCandidate(num)
         }
     }
 }
@@ -97,8 +96,7 @@ private fun clearOtherBlockCol(
     val col = cell.col
     for (row in 0..8) {
         if (row < block.row || row >= block.row + 3) {
-            val isChange = board.rows[row][col].candidateList.remove(num)
-            board.isChanged = board.isChanged || isChange
+            board.rows[row][col].removeCandidate(num)
         }
     }
 }

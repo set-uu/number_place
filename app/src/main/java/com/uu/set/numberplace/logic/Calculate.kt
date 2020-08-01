@@ -14,7 +14,7 @@ class Calculate {
         val status: ResolveStatus
         while (true) {
             // この周で変更があったか
-            board.isChanged = false
+            board.resetIsChanged()
 
             // ラインに一箇所だけ入る数字があるか
             lines(board)

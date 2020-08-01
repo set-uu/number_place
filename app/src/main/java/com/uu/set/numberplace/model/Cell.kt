@@ -10,6 +10,7 @@ class Cell(val row: Int, val col: Int, var resolve: Int) :Serializable {
     //    決まった数字
     //    入る可能性のある数字
     val candidateList: MutableList<Int> = mutableListOf()
+    var isChanged = false
 
     init {
         if (this.resolve == 0) {
@@ -29,5 +30,11 @@ class Cell(val row: Int, val col: Int, var resolve: Int) :Serializable {
     fun updateResolve(resolve: Int) {
         this.resolve = resolve
         this.candidateList.clear()
+        this.isChanged = true
+    }
+
+    fun removeCandidate(number: Int) {
+        val localIsChanged = this.candidateList.remove(number)
+        this.isChanged = this.isChanged || localIsChanged
     }
 }

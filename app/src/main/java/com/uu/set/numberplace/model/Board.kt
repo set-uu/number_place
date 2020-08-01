@@ -9,7 +9,15 @@ import java.util.*
  * 盤面全体の情報モデル
  */
 class Board(private val data: List<List<Int>>) : Serializable {
-    var isChanged :Boolean = false
+    val isChanged: Boolean
+        get() {
+            for (row in 0..8) {
+                for (col in 0..8) {
+                    if (rows[row][col].isChanged) return true
+                }
+            }
+            return false
+        }
     val rows: MutableList<MutableList<Cell>> = mutableListOf()
     var resolveStatus: String = ""
 
@@ -40,19 +48,27 @@ class Board(private val data: List<List<Int>>) : Serializable {
      * マスに入る値から行、列、3*3の入る数字を変更する
      */
     fun updateCell(cell: Cell) {
+        cell.isChanged = true
         val block = BlockPositions.get(cell.row, cell.col)
         for (x in 0..2) {
             for (y in 0..2) {
-                rows[block.row + x][block.col + y].candidateList.remove(cell.resolve)
+                rows[block.row + x][block.col + y].removeCandidate(cell.resolve)
             }
         }
 
         // 同じ行を参照する
-        for (col in 0..8) rows[cell.row][col].candidateList.remove(cell.resolve)
+        for (col in 0..8) rows[cell.row][col].removeCandidate(cell.resolve)
 
         // 同じ列を参照する
-        for (row in 0..8) rows[row][cell.col].candidateList.remove(cell.resolve)
-        isChanged = true
+        for (row in 0..8) rows[row][cell.col].removeCandidate(cell.resolve)
+    }
+
+    fun resetIsChanged() {
+        for (row in 0..8) {
+            for (col in 0..8) {
+                this.rows[row][col].isChanged = false
+            }
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

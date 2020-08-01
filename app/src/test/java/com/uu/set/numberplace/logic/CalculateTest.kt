@@ -20,6 +20,7 @@ class CalculateTest {
         mutableList.add(mutableListOf(7, 4, 0, 0, 0, 1, 0, 9, 2))
         val board = Board(mutableList)
         Calculate().calc(board)
+        println(board)
     }
 
     @Test
@@ -36,6 +37,7 @@ class CalculateTest {
         mutableList.add(mutableListOf(0, 7, 0, 5, 0, 4, 0, 8, 0))
         val board = Board(mutableList)
         Calculate().calc(board)
+        println(board)
     }
 
 
@@ -53,6 +55,32 @@ class CalculateTest {
         mutableList.add(mutableListOf(0, 0, 6, 0, 0, 3, 0, 4, 0))
         val board = Board(mutableList)
         Calculate().calc(board)
+        println(board)
+    }
+
+    // 高難度問題
+    @Test
+    fun testCalc4() {
+        val mutableList = mutableListOf<MutableList<Int>>()
+        mutableList.add(mutableListOf(5, 0, 0, 0, 7, 0, 6, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 8, 1, 0, 2, 7, 0))
+        mutableList.add(mutableListOf(0, 2, 7, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 1, 5, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 5, 3, 0, 1, 9, 0))
+        mutableList.add(mutableListOf(3, 0, 0, 0, 2, 0, 8, 0, 0))
+        mutableList.add(mutableListOf(0, 9, 8, 7, 0, 0, 0, 2, 0))
+        mutableList.add(mutableListOf(1, 0, 0, 0, 0, 5, 0, 6, 0))
+        mutableList.add(mutableListOf(2, 0, 0, 0, 0, 3, 0, 0, 8))
+        val board = Board(mutableList)
+        try {
+            Calculate().calc(board)
+
+        } catch (e :MyException) {
+            println(e)
+            println(board)
+            throw e
+        }
+        println(board)
     }
 
     @Test(expected = MyException::class)

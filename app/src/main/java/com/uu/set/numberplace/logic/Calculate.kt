@@ -1,6 +1,7 @@
 package com.uu.set.numberplace.logic
 
 import com.uu.set.numberplace.MyException
+import com.uu.set.numberplace.model.BlockPositions
 import com.uu.set.numberplace.model.Board
 import com.uu.set.numberplace.model.Cell
 
@@ -11,12 +12,12 @@ class Calculate {
     fun calc(board: Board): Board {
         // 初期化
         for (x in 0..8) {
-            for (y in 0..8) updatedBoard(board, board.rows[x][y])
+            for (y in 0..8) board.updateCell(board.rows[x][y])
         }
         val status: ResolveStatus
         while (true) {
             // この周で変更があったか
-            board.isChange = false
+            board.isChanged = false
 
             // ラインに一箇所だけ入る数字があるか
             oneLine(board)
@@ -30,11 +31,11 @@ class Calculate {
                 for (y in 0..8) oneCell(board, board.rows[x][y])
             }
 
-            if (board.allResolve()) {
+            if (board.isAllResolved()) {
                 status = ResolveStatus.Resolved
                 break
             }
-            if (!board.isChange) {
+            if (!board.isChanged) {
                 status = ResolveStatus.NotChange
                 break
             }
@@ -67,8 +68,7 @@ class Calculate {
             if (targetColList.size == 1) {
                 val cell = board.rows[row][targetColList[0]]
                 cell.updateResolve(num)
-                updatedBoard(board, cell)
-                board.isChange = true
+                board.updateCell(cell)
             }
         }
     }
@@ -90,8 +90,7 @@ class Calculate {
             if (targetRowList.size == 1) {
                 val cell = board.rows[targetRowList[0]][col]
                 cell.updateResolve(num)
-                updatedBoard(board, cell)
-                board.isChange = true
+                board.updateCell(cell)
             }
         }
     }
@@ -103,8 +102,7 @@ class Calculate {
         if (cell.resolve != 0) return
         if (cell.candidateList.size == 1) {
             cell.updateResolve(cell.candidateList.first())
-            updatedBoard(board, cell)
-            board.isChange = true
+            board.updateCell(cell)
         }
     }
 
@@ -138,8 +136,7 @@ class Calculate {
                         // 可能性のある場所が1箇所だけなら当てはめる
                         val cell = intoCellList.first()
                         cell.updateResolve(num)
-                        updatedBoard(board, cell)
-                        board.isChange = true
+                        board.updateCell(cell)
                     }
                     2, 3 -> {
                         var row = 0
@@ -191,7 +188,7 @@ class Calculate {
         for (col in 0..8) {
             if (col < block.col || col >= block.col + 3) {
                 val isChange = board.rows[row][col].candidateList.remove(num)
-                board.isChange = board.isChange || isChange
+                board.isChanged = board.isChanged || isChange
             }
         }
     }
@@ -207,27 +204,9 @@ class Calculate {
         for (row in 0..8) {
             if (row < block.row || row >= block.row + 3) {
                 val isChange = board.rows[row][col].candidateList.remove(num)
-                board.isChange = board.isChange || isChange
+                board.isChanged = board.isChanged || isChange
             }
         }
-    }
-
-    /**
-     * マスに入る値から行、列、3*3の入る数字を変更する
-     */
-    private fun updatedBoard(board: Board, cell: Cell) {
-        val block = BlockPositions.get(cell.row, cell.col)
-        for (x in 0..2) {
-            for (y in 0..2) {
-                board.rows[block.row + x][block.col + y].candidateList.remove(cell.resolve)
-            }
-        }
-
-        // 同じ行を参照する
-        for (col in 0..8) board.rows[cell.row][col].candidateList.remove(cell.resolve)
-
-        // 同じ列を参照する
-        for (row in 0..8) board.rows[row][cell.col].candidateList.remove(cell.resolve)
     }
 
     enum class ResolveStatus() {
@@ -235,44 +214,4 @@ class Calculate {
         Resolved
     }
 
-    enum class BlockPositions(val row: Int, val col: Int) {
-        LEFT_UP(0, 0),
-        LEFT_MID(3, 0),
-        LEFT_DOWN(6, 0),
-        CENTER_UP(0, 3),
-        CENTER_MID(3, 3),
-        CENTER_DOWN(6, 3),
-        RIGHT_UP(0, 6),
-        RIGHT_MID(3, 6),
-        RIGHT_DOWN(6, 6), ;
-
-        companion object {
-            fun get(row: Int, col: Int): BlockPositions {
-                when (col) {
-                    0, 1, 2 -> {
-                        when (row) {
-                            0, 1, 2 -> return LEFT_UP
-                            3, 4, 5 -> return LEFT_MID
-                            6, 7, 8 -> return LEFT_DOWN
-                        }
-                    }
-                    3, 4, 5 -> {
-                        when (row) {
-                            0, 1, 2 -> return CENTER_UP
-                            3, 4, 5 -> return CENTER_MID
-                            6, 7, 8 -> return CENTER_DOWN
-                        }
-                    }
-                    6, 7, 8 -> {
-                        when (row) {
-                            0, 1, 2 -> return RIGHT_UP
-                            3, 4, 5 -> return RIGHT_MID
-                            6, 7, 8 -> return RIGHT_DOWN
-                        }
-                    }
-                }
-                throw MyException("セル位置が不正")
-            }
-        }
-    }
 }

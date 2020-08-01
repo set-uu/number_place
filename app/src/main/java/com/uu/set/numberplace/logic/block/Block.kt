@@ -1,4 +1,4 @@
-package com.uu.set.numberplace.logic
+package com.uu.set.numberplace.logic.block
 
 import com.uu.set.numberplace.model.BlockPositions
 import com.uu.set.numberplace.model.Board
@@ -6,32 +6,23 @@ import com.uu.set.numberplace.model.Cell
 
 fun blocks(board: Board): Unit {
     BlockPositions.values()
-        .forEach { blockPositions -> oneBlock(board, blockPositions) }
+        .forEach { blockPositions ->
+            oneBlock(
+                board,
+                blockPositions
+            )
+        }
 }
 
 /**
  * 3*3のブロックに入る値を確認する
  */
 private fun oneBlock(board: Board, block: BlockPositions) {
-    val resolvedList = mutableListOf<Int>()
-    // 入っていない数字が入る可能性のある場所を取得
-    val unResolvedCell = mutableListOf<Cell>()
-    for (x in 0..2) {
-        for (y in 0..2) {
-            val cell = board.rows[block.row + x][block.col + y]
-            if (cell.resolve != 0)
-                resolvedList.add(cell.resolve)
-            else
-                unResolvedCell.add(cell)
-        }
-    }
-
-    // ブロックに入っていない数字を取得
-    val unResolvedList = DEFAULT_LIST.subtract(resolvedList)
-    unResolvedList.forEach { num ->
+    val unresolvedData = UnresolvedData(board, block)
+    unresolvedData.numberList.forEach { num ->
         run {
             val intoCellList = mutableListOf<Cell>()
-            unResolvedCell.forEach { cell ->
+            unresolvedData.cellList.forEach { cell ->
                 if (cell.candidateList.contains(num)) intoCellList.add(cell)
             }
             when (intoCellList.size) {

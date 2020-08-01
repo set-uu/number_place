@@ -1,9 +1,8 @@
 package com.uu.set.numberplace.logic
 
 import com.uu.set.numberplace.MyException
+import com.uu.set.numberplace.logic.block.blocks
 import com.uu.set.numberplace.model.Board
-
-val DEFAULT_LIST = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
 
 class Calculate {
 

@@ -6,22 +6,27 @@ import com.uu.set.numberplace.model.Cell
 
 
 class UnresolvedData(board: Board, block: BlockPositions) {
-    // まだ解決していない数字
-    val numberList = mutableListOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
-
-    // まだ解決していないセル
-    val cellList = mutableListOf<Cell>()
+    // まだ解決していない数字とcellの組
+    val numberMap: MutableMap<Int, MutableList<Cell>> = mutableMapOf()
 
     init {
         // 入っていない数字が入る可能性のある場所を取得
         for (x in 0..2) {
             for (y in 0..2) {
                 val cell = board.rows[block.row + x][block.col + y]
-                if (cell.resolve != 0)
-                    numberList.remove(cell.resolve)
-                else
-                    cellList.add(cell)
+                if (cell.resolve != 0) continue
+                cell.candidateList.forEach { addNumberMap(it, cell) }
             }
         }
+    }
+
+    private fun addNumberMap(number: Int, cell: Cell) {
+        if (numberMap.containsKey(number)) {
+            numberMap[number]?.add(cell)
+        } else {
+            val cellList = mutableListOf(cell)
+            numberMap[number] = cellList
+        }
+
     }
 }

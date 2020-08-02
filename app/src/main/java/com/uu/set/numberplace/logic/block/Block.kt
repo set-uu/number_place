@@ -33,4 +33,5 @@ private fun oneBlock(board: Board, block: BlockPositions) {
             }
         }
     }
+    clearSameBlock(unresolvedData)
 }

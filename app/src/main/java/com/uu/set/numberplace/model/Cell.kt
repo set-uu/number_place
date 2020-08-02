@@ -37,4 +37,16 @@ class Cell(val row: Int, val col: Int, var resolve: Int) :Serializable {
         val localIsChanged = this.candidateList.remove(number)
         this.isChanged = this.isChanged || localIsChanged
     }
+
+    fun updateCandidateList(newList: MutableList<Int>) {
+        if(newList.size != this.candidateList.size) this.isChanged = true
+        this.candidateList.clear()
+        this.candidateList.addAll(newList)
+    }
+
+    fun samePosition(cell: Cell): Boolean {
+        if (this.row != cell.row) return false
+        if (this.col != cell.col) return false
+        return true
+    }
 }

@@ -33,70 +33,9 @@ private fun oneBlock(board: Board, block: BlockPositions) {
                     board.updateCell(cell)
                 }
                 2, 3 -> {
-                    var row = 0
-                    var col = 0
-                    intoCellList.forEachIndexed { index, cell ->
-                        run {
-                            if (index == 0) {
-                                row = cell.row
-                                col = cell.col
-                            } else {
-                                if (row != cell.row) row = -1
-                                if (col != cell.col) col = -1
-                            }
-                        }
-                    }
-                    // 2または3箇所で直線的に並んでいる場合
-                    if (row != -1) {
-                        // その直線の他のブロックにはその数字は入らないことにする
-                        clearOtherBlockRow(
-                            board,
-                            intoCellList.first(),
-                            block,
-                            num
-                        )
-                    }
-                    if (col != -1) {
-                        // その直線の他のブロックにはその数字は入らないことにする
-                        clearOtherBlockCol(
-                            board,
-                            intoCellList.first(),
-                            block,
-                            num
-                        )
-                    }
+                    clearOtherBlock(board, intoCellList, block, num)
                 }
             }
-        }
-    }
-}
-
-private fun clearOtherBlockRow(
-    board: Board,
-    cell: Cell,
-    block: BlockPositions,
-    num: Int
-) {
-    // cell と同じrowかつ別ブロックから対象の数字を取り除く
-    val row = cell.row
-    for (col in 0..8) {
-        if (col < block.col || col >= block.col + 3) {
-            board.rows[row][col].removeCandidate(num)
-        }
-    }
-}
-
-private fun clearOtherBlockCol(
-    board: Board,
-    cell: Cell,
-    block: BlockPositions,
-    num: Int
-) {
-    // cell と同じcolかつ別ブロックから対象の数字を取り除く
-    val col = cell.col
-    for (row in 0..8) {
-        if (row < block.row || row >= block.row + 3) {
-            board.rows[row][col].removeCandidate(num)
         }
     }
 }

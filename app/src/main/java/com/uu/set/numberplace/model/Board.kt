@@ -44,6 +44,14 @@ class Board(private val data: List<List<Int>>) : Serializable {
         return true
     }
 
+    fun updateAllCell() {
+        rows.forEach {
+            it.forEach { cell ->
+                this.updateCell(cell)
+            }
+        }
+    }
+
     /**
      * マスに入る値から行、列、3*3の入る数字を変更する
      */

@@ -4,20 +4,28 @@ import com.uu.set.numberplace.model.BlockPositions
 import com.uu.set.numberplace.model.Board
 
 fun blocks(board: Board): Unit {
+    val unresolvedDataMap: MutableMap<BlockPositions, UnresolvedData> = mutableMapOf()
     BlockPositions.values()
         .forEach { blockPositions ->
+            val unresolvedData = UnresolvedData(board, blockPositions)
             oneBlock(
                 board,
-                blockPositions
+                blockPositions,
+                unresolvedData
             )
+            unresolvedDataMap[blockPositions] = unresolvedData
         }
+    clearFromSameLine(unresolvedDataMap)
 }
 
 /**
  * 3*3のブロックに入る値を確認する
  */
-private fun oneBlock(board: Board, block: BlockPositions) {
-    val unresolvedData = UnresolvedData(board, block)
+private fun oneBlock(
+    board: Board,
+    block: BlockPositions,
+    unresolvedData: UnresolvedData
+) {
     unresolvedData.numberMap.forEach { (num, cellList) ->
         run {
             when (cellList.size) {

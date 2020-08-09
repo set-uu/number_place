@@ -29,4 +29,13 @@ class UnresolvedData(board: Board, block: BlockPositions) {
         }
 
     }
+
+    fun rowPositions(number: Int): MutableSet<Int>? {
+        return this.numberMap[number]?.map { cell -> cell.row }?.toSortedSet()
+    }
+
+    fun colPositions(number: Int): MutableSet<Int>? {
+        return this.numberMap[number]?.map { cell -> cell.col }?.toSortedSet()
+    }
+
 }

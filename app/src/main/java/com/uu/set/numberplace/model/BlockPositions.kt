@@ -41,4 +41,16 @@ enum class BlockPositions(val row: Int, val col: Int) {
             throw MyException("セル位置が不正")
         }
     }
+
+    fun getSameRow(): MutableSet<BlockPositions> {
+        val set = mutableSetOf<BlockPositions>()
+        values().forEach { if (it.row == this.row && it.col != this.col) set.add(it) }
+        return set
+    }
+
+    fun getSameCol(): MutableSet<BlockPositions> {
+        val set = mutableSetOf<BlockPositions>()
+        values().forEach { if (it.row != this.row && it.col == this.col) set.add(it) }
+        return set
+    }
 }

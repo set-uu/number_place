@@ -8,9 +8,7 @@ class Calculate {
 
     fun calc(board: Board): Board {
         // 初期化
-        for (x in 0..8) {
-            for (y in 0..8) board.updateCell(board.rows[x][y])
-        }
+        board.updateAllCell()
         val status: ResolveStatus
         while (true) {
             // この周で変更があったか

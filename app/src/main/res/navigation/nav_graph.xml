@@ -25,7 +25,7 @@
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
         <argument
-            android:name="board"
-            app:argType="com.uu.set.numberplace.model.Board" />
+            android:name="@string/calc_result"
+            app:argType="com.uu.set.numberplace.model.CalcResult" />
     </fragment>
 </navigation>

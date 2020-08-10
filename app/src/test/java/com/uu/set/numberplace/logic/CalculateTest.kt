@@ -1,7 +1,7 @@
 package com.uu.set.numberplace.logic
 
-import com.uu.set.numberplace.MyException
 import com.uu.set.numberplace.model.Board
+import com.uu.set.numberplace.model.ResolveStatus
 import org.junit.Assert
 import org.junit.Test
 
@@ -20,8 +20,9 @@ class CalculateTest {
         mutableList.add(mutableListOf(0, 0, 2, 9, 0, 0, 0, 3, 8))
         mutableList.add(mutableListOf(7, 4, 0, 0, 0, 1, 0, 9, 2))
         val board = Board(mutableList)
-        Calculate().calc(board)
-        println(board)
+        val result = Calculate().calc(board)
+        println(result.boardList.last())
+        Assert.assertEquals(ResolveStatus.Resolved, result.resolveStatus)
     }
 
     @Test
@@ -37,8 +38,9 @@ class CalculateTest {
         mutableList.add(mutableListOf(0, 0, 0, 0, 9, 0, 0, 0, 0))
         mutableList.add(mutableListOf(0, 7, 0, 5, 0, 4, 0, 8, 0))
         val board = Board(mutableList)
-        Calculate().calc(board)
-        println(board)
+        val result = Calculate().calc(board)
+        println(result.boardList.last())
+        Assert.assertEquals(ResolveStatus.Resolved, result.resolveStatus)
     }
 
 
@@ -55,8 +57,9 @@ class CalculateTest {
         mutableList.add(mutableListOf(0, 1, 0, 2, 0, 0, 6, 0, 0))
         mutableList.add(mutableListOf(0, 0, 6, 0, 0, 3, 0, 4, 0))
         val board = Board(mutableList)
-        Calculate().calc(board)
-        println(board)
+        val result = Calculate().calc(board)
+        println(result.boardList.last())
+        Assert.assertEquals(ResolveStatus.Resolved, result.resolveStatus)
     }
 
     // 高難度問題
@@ -73,15 +76,9 @@ class CalculateTest {
         mutableList.add(mutableListOf(1, 0, 0, 0, 0, 5, 0, 6, 0))
         mutableList.add(mutableListOf(2, 0, 0, 0, 0, 3, 0, 0, 8))
         val board = Board(mutableList)
-        try {
-            Calculate().calc(board)
-
-        } catch (e :MyException) {
-            println(e)
-            println(board)
-            throw e
-        }
-        println(board)
+        val result = Calculate().calc(board)
+        println(result.boardList.last())
+        Assert.assertEquals(ResolveStatus.Resolved, result.resolveStatus)
     }
 
     // 高難度問題
@@ -98,15 +95,9 @@ class CalculateTest {
         mutableList.add(mutableListOf(6, 0, 0, 0, 0, 0, 0, 9, 4))
         mutableList.add(mutableListOf(7, 0, 3, 0, 0, 4, 0, 0, 0))
         val board = Board(mutableList)
-        try {
-            Calculate().calc(board)
-
-        } catch (e :MyException) {
-            println(e)
-            println(board)
-            throw e
-        }
-        println(board)
+        val result = Calculate().calc(board)
+        println(result.boardList.last())
+        Assert.assertEquals(ResolveStatus.Resolved, result.resolveStatus)
     }
 
     // あぶり出し確認
@@ -123,12 +114,10 @@ class CalculateTest {
         mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
         mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
         val board = Board(mutableList)
-        try {
-            Calculate().calc(board)
-        } catch (e :MyException) {
-            println(board)
-            Assert.assertEquals(1, board.rows[0][3].resolve)
-        }
+        val result = Calculate().calc(board)
+        println(result.boardList.last())
+        Assert.assertEquals(ResolveStatus.NotResolved, result.resolveStatus)
+        Assert.assertEquals(1, result.boardList.last().rows[0][3].resolve)
     }
 
     // あぶり出し確認
@@ -145,16 +134,13 @@ class CalculateTest {
         mutableList.add(mutableListOf(0, 0, 0, 0, 2, 0, 0, 0, 0))
         mutableList.add(mutableListOf(0, 0, 0, 0, 3, 0, 0, 0, 0))
         val board = Board(mutableList)
-        try {
-            Calculate().calc(board)
-        } catch (e :MyException) {
-            println(board)
-            Assert.assertEquals(1, board.rows[1][5].resolve)
-        }
-        println(board)
+        val result = Calculate().calc(board)
+        println(result.boardList.last())
+        Assert.assertEquals(ResolveStatus.NotResolved, result.resolveStatus)
+        Assert.assertEquals(1, result.boardList.last().rows[1][5].resolve)
     }
 
-    @Test(expected = MyException::class)
+    @Test
     fun testCalcError() {
         // 前提が間違っていて解けない問題
         val mutableList = mutableListOf<MutableList<Int>>()
@@ -168,6 +154,8 @@ class CalculateTest {
         mutableList.add(mutableListOf(0, 0, 2, 9, 0, 0, 0, 3, 8))
         mutableList.add(mutableListOf(7, 4, 0, 0, 0, 1, 0, 9, 2))
         val board = Board(mutableList)
-        Calculate().calc(board)
+        val result = Calculate().calc(board)
+        println(result.boardList.last())
+        Assert.assertEquals(ResolveStatus.NotResolved, result.resolveStatus)
     }
 }

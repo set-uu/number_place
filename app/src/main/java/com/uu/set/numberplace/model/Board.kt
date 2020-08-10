@@ -17,6 +17,7 @@ fun boardFromCells(data: MutableList<MutableList<Cell>>): Board {
 class Board() : Serializable, Cloneable {
     constructor(data: MutableList<MutableList<Int>>) : this() {
         this.rows = initRows(data = data)
+        updateAllCell()
     }
 
     val isChanged: Boolean

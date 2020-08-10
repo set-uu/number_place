@@ -2,7 +2,6 @@ package com.uu.set.numberplace
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.uu.set.numberplace.logic.Calculate
 import com.uu.set.numberplace.model.Board
+import com.uu.set.numberplace.model.CalcResult
 import com.uu.set.numberplace.view.Ad
 
 /**
@@ -33,30 +33,21 @@ class FirstFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         view.findViewById<Button>(R.id.start_calc).setOnClickListener {
-            val board = calcBoard(view)
+            val result = calcBoard(view)
             val bundle = Bundle()
-            bundle.putSerializable("board", board)
+            bundle.putSerializable(getString(R.string.calc_result), result)
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment, bundle)
         }
         Ad.loadAd(view)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun calcBoard(view: View): Board {
+    fun calcBoard(view: View): CalcResult {
         // 各セルの値をリストで取得する
         val board = Board(getViewCells(view))
         // boardを生成する
         // 回答結果を得る
-        board.resolveStatus = "解析完了"
-        try {
-            Calculate().calc(board)
-        } catch (e: MyException) {
-            e.message?.let {
-                Log.d(activity?.packageName, it)
-                board.resolveStatus = it
-            }
-        }
-        return board
+        return Calculate().calc(board)
     }
 
     private fun getViewCells(view: View): MutableList<MutableList<Int>> {

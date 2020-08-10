@@ -1,15 +1,14 @@
 package com.uu.set.numberplace.logic
 
-import com.uu.set.numberplace.MyException
 import com.uu.set.numberplace.logic.block.blocks
 import com.uu.set.numberplace.model.Board
+import com.uu.set.numberplace.model.CalcResult
+import com.uu.set.numberplace.model.ResolveStatus
 
 class Calculate {
 
-    fun calc(board: Board): Board {
-        // 初期化
-        board.updateAllCell()
-        val status: ResolveStatus
+    fun calc(board: Board): CalcResult {
+        val result = CalcResult(board)
         while (true) {
             // この周で変更があったか
             board.resetIsChanged()
@@ -23,17 +22,16 @@ class Calculate {
             // 1マス単位で入るものはあるか
             oneCell(board)
 
+            result.boardList.add(board.clone())
             if (board.isAllResolved()) {
-                status = ResolveStatus.Resolved
+                result.resolveStatus = ResolveStatus.Resolved
                 break
             }
             if (!board.isChanged) {
-                status = ResolveStatus.NotChange
                 break
             }
         }
-        if (status == ResolveStatus.NotChange) throw MyException("情報が足りないか、前提が間違っています")
-        return board
+        return result
     }
 
     /**
@@ -50,11 +48,6 @@ class Calculate {
                 }
             }
         }
-    }
-
-    enum class ResolveStatus() {
-        NotChange,
-        Resolved
     }
 
 }

@@ -8,7 +8,17 @@ import java.util.*
 /**
  * 盤面全体の情報モデル
  */
-class Board(private val data: List<List<Int>>) : Serializable {
+fun boardFromCells(data: MutableList<MutableList<Cell>>): Board {
+    val board = Board()
+    board.rows = data
+    return board
+}
+
+class Board() : Serializable, Cloneable {
+    constructor(data: MutableList<MutableList<Int>>) : this() {
+        this.rows = initRows(data = data)
+    }
+
     val isChanged: Boolean
         get() {
             for (row in 0..8) {
@@ -18,10 +28,11 @@ class Board(private val data: List<List<Int>>) : Serializable {
             }
             return false
         }
-    val rows: MutableList<MutableList<Cell>> = mutableListOf()
+    lateinit var rows: MutableList<MutableList<Cell>>
     var resolveStatus: String = ""
 
-    init {
+    private fun initRows(data: MutableList<MutableList<Int>>): MutableList<MutableList<Cell>> {
+        val rowList = mutableListOf<MutableList<Cell>>()
         data.forEachIndexed { row, list ->
             run {
                 val cols = mutableListOf<Cell>()
@@ -30,9 +41,10 @@ class Board(private val data: List<List<Int>>) : Serializable {
                         cols.add(Cell(row, col, i))
                     }
                 }
-                rows.add(cols)
+                rowList.add(cols)
             }
         }
+        return rowList
     }
 
     fun isAllResolved(): Boolean {
@@ -93,5 +105,18 @@ class Board(private val data: List<List<Int>>) : Serializable {
         }
 
         return rowJoiner.toString()
+    }
+
+    public override fun clone(): Board {
+        val newRows = mutableListOf<MutableList<Cell>>()
+        rows.forEach {
+            val newRow = mutableListOf<Cell>()
+            it.forEach { cell ->
+                newRow.add(cell.clone())
+            }
+            newRows.add(newRow)
+        }
+
+        return boardFromCells(newRows)
     }
 }

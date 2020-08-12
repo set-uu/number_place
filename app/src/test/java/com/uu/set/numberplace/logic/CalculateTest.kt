@@ -78,7 +78,7 @@ class CalculateTest {
         val board = Board(mutableList)
         val result = Calculate().calc(board)
         println(result.boardList.last())
-        Assert.assertEquals(ResolveStatus.Resolved, result.resolveStatus)
+        Assert.assertEquals(ResolveStatus.Another, result.resolveStatus)
     }
 
     // 高難度問題
@@ -97,7 +97,26 @@ class CalculateTest {
         val board = Board(mutableList)
         val result = Calculate().calc(board)
         println(result.boardList.last())
-        Assert.assertEquals(ResolveStatus.Resolved, result.resolveStatus)
+        Assert.assertEquals(ResolveStatus.Another, result.resolveStatus)
+    }
+
+    // 高難度問題
+    @Test
+    fun testCalc6() {
+        val mutableList = mutableListOf<MutableList<Int>>()
+        mutableList.add(mutableListOf(5, 0, 0, 2, 0, 0, 0, 0, 9))
+        mutableList.add(mutableListOf(0, 7, 0, 0, 8, 0, 0, 3, 0))
+        mutableList.add(mutableListOf(0, 2, 0, 0, 6, 0, 0, 1, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 9, 0, 2, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 7, 0, 0, 0, 6))
+        mutableList.add(mutableListOf(1, 9, 0, 0, 0, 0, 0, 0, 8))
+        mutableList.add(mutableListOf(0, 0, 2, 0, 0, 0, 1, 6, 5))
+        mutableList.add(mutableListOf(0, 4, 0, 0, 0, 7, 0, 0, 0))
+        mutableList.add(mutableListOf(8, 0, 9, 5, 0, 0, 0, 0, 0))
+        val board = Board(mutableList)
+        val result = Calculate().calc(board)
+        println(result.boardList.last())
+        Assert.assertEquals(ResolveStatus.Another, result.resolveStatus)
     }
 
     // あぶり出し確認
@@ -116,8 +135,8 @@ class CalculateTest {
         val board = Board(mutableList)
         val result = Calculate().calc(board)
         println(result.boardList.last())
-        Assert.assertEquals(ResolveStatus.NotResolved, result.resolveStatus)
         Assert.assertEquals(1, result.boardList.last().rows[0][3].resolve)
+        Assert.assertEquals(ResolveStatus.Another, result.resolveStatus)
     }
 
     // あぶり出し確認
@@ -136,8 +155,8 @@ class CalculateTest {
         val board = Board(mutableList)
         val result = Calculate().calc(board)
         println(result.boardList.last())
-        Assert.assertEquals(ResolveStatus.NotResolved, result.resolveStatus)
         Assert.assertEquals(1, result.boardList.last().rows[1][5].resolve)
+        Assert.assertEquals(ResolveStatus.Another, result.resolveStatus)
     }
 
     @Test

@@ -16,5 +16,8 @@ fun rollBack(result: CalcResult): Board {
     result.boardList.removeAll(removeBoardList)
     val cell = result.boardList.last().rows[guessData.row][guessData.col]
     cell.removeCandidate(guessData.number)
+
+    if(cell.candidateList.isEmpty()) return rollBack(result)
+
     return result.boardList.last()
 }

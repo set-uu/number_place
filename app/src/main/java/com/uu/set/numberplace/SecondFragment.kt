@@ -10,11 +10,14 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.uu.set.numberplace.model.CalcResult
 import com.uu.set.numberplace.view.Ad
+import com.uu.set.numberplace.view.Board
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
 class SecondFragment : Fragment() {
+
+    private lateinit var boardView: Board
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,29 +38,18 @@ class SecondFragment : Fragment() {
     }
 
     fun setup(view: View): Unit {
-        val packageName = activity?.packageName
         val result: CalcResult = arguments?.get(getString(R.string.calc_result)) as CalcResult
-        val board = result.boardList.last()
+        setResolveStatus(view, result.resolveStatus.viewString)
 
-        val resolveStatus = view.findViewById<TextView>(
-            resources.getIdentifier(
-                "resolve_status",
-                "id",
-                packageName
-            )
-        )
-        resolveStatus.text = result.resolveStatus.viewString
-        for (row in 0..8) {
-            for (col in 0..8) {
-                val cell = view.findViewById<TextView>(
-                    resources.getIdentifier(
-                        "cell$row$col",
-                        "id",
-                        packageName
-                    )
-                )
-                cell.text = board.rows[row][col].resolveString()
-            }
-        }
+        boardView = Board(view, activity!!)
+        boardView.setupFromBoardModel(result.boardList.last())
+    }
+
+    private fun setResolveStatus(
+        view: View,
+        viewString: String
+    ) {
+        val resolveStatusView = view.findViewById<TextView>(R.id.resolve_status)
+        resolveStatusView.text = viewString
     }
 }

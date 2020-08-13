@@ -1,17 +1,18 @@
 package com.uu.set.numberplace.model
 
 import com.uu.set.numberplace.MyException
+import com.uu.set.numberplace.R
 
-enum class BlockPositions(val row: Int, val col: Int) {
-    LEFT_UP(0, 0),
-    LEFT_MID(3, 0),
-    LEFT_DOWN(6, 0),
-    CENTER_UP(0, 3),
-    CENTER_MID(3, 3),
-    CENTER_DOWN(6, 3),
-    RIGHT_UP(0, 6),
-    RIGHT_MID(3, 6),
-    RIGHT_DOWN(6, 6), ;
+enum class BlockPositions(val row: Int, val col: Int, val viewId: Int) {
+    LEFT_UP(0, 0, R.id.left_top),
+    LEFT_MID(3, 0, R.id.left_middle),
+    LEFT_DOWN(6, 0, R.id.left_bottom),
+    CENTER_UP(0, 3, R.id.center_top),
+    CENTER_MID(3, 3, R.id.center_middle),
+    CENTER_DOWN(6, 3, R.id.center_bottom),
+    RIGHT_UP(0, 6, R.id.right_top),
+    RIGHT_MID(3, 6, R.id.right_middle),
+    RIGHT_DOWN(6, 6, R.id.right_bottom), ;
 
     companion object {
         fun get(row: Int, col: Int): BlockPositions {

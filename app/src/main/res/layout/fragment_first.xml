@@ -6,31 +6,31 @@
     android:layout_height="match_parent"
     tools:context=".FirstFragment">
 
-    <!--    <com.uu.set.numberplace.view.Cell-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content" />-->
-    <!--  やりたいこと
-      3*3ブロックを一つのレイアウトとして読み込みたい
-      ブロックを3*3のレイアウトとして読み込みたい
-      表示した隠せるの値から解決に導きたい
-      インプットは行列の2次元配列として持っている
-      viewのセル＝モデルのセル
-      viewのboard＝モデルのboard
-      -->
-    <include layout="@layout/board" />
+    <include
+        android:id="@+id/board"
+        layout="@layout/board_grid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/top_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/start_calc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/next"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/ad"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/board"
-        app:layout_constraintVertical_bias="0.16" />
+        app:layout_constraintTop_toBottomOf="@+id/board" />
 
-    <include layout="@layout/ad" />
+    <include
+        android:id="@+id/ad"
+        layout="@layout/ad"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

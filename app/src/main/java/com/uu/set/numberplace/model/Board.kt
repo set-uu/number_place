@@ -29,6 +29,18 @@ class Board() : Serializable, Cloneable {
             }
             return false
         }
+
+    val hasNoCandidateCell:Boolean
+    get() {
+        for (row in 0..8) {
+            for (col in 0..8) {
+                val cell = rows[row][col]
+                if (cell.resolve == 0 && cell.candidateList.isEmpty()) return true
+            }
+        }
+        return false
+    }
+
     lateinit var rows: MutableList<MutableList<Cell>>
     var resolveStatus: String = ""
 

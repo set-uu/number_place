@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:columnCount="3"
+    android:rowCount="3"
+    android:background="@drawable/border"
+    >
+
+    <include
+        layout="@layout/cell"
+        android:id="@+id/cell00"
+     />
+    <include
+        layout="@layout/cell"
+        android:id="@+id/cell01"
+        />
+    <include
+        layout="@layout/cell"
+        android:id="@+id/cell02"
+        />
+
+    <include
+        layout="@layout/cell"
+        android:id="@+id/cell10"
+        />
+    <include
+        layout="@layout/cell"
+        android:id="@+id/cell11"
+        />
+    <include
+        layout="@layout/cell"
+        android:id="@+id/cell12"
+        />
+
+    <include
+        layout="@layout/cell"
+        android:id="@+id/cell20"
+        />
+    <include
+        layout="@layout/cell"
+        android:id="@+id/cell21"
+        />
+    <include
+        layout="@layout/cell"
+        android:id="@+id/cell22"
+        />
+
+</GridLayout>

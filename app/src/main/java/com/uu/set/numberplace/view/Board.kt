@@ -6,8 +6,9 @@ import android.widget.GridLayout
 import android.widget.TextView
 import com.uu.set.numberplace.model.BlockPositions
 import com.uu.set.numberplace.model.Board
+import java.io.Serializable
 
-class Board(private val view: View, private val context: Context) {
+class Board(private val view: View, private val context: Context) : Serializable {
     fun createBoardModel(): Board {
         return Board(getCellsNumber())
     }

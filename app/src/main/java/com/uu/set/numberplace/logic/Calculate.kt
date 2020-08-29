@@ -13,6 +13,11 @@ class Calculate {
     fun calc(board: Board): CalcResult {
         var currentBoard = board
         val result = CalcResult(currentBoard)
+        if (currentBoard.isInconsistent) {
+            // 初期盤面で矛盾があった場合はその時点でエラーにする
+            result.resolveStatus = ResolveStatus.NotResolved
+            return result
+        }
         while (true) {
             // この周で変更があったか
             currentBoard.resetIsChanged()

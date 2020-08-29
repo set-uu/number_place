@@ -11,7 +11,7 @@ class BoardTest {
     fun initTest() {
         val mutableList = mutableListOf<MutableList<Int>>()
         for (i in 1..9) {
-            val col = mutableListOf(1,2,3,4,5,6,7,8,9)
+            val col = mutableListOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
             mutableList.add(col)
         }
         val board = Board(mutableList)
@@ -22,7 +22,7 @@ class BoardTest {
     fun isChangedInitTest() {
         val mutableList = mutableListOf<MutableList<Int>>()
         for (i in 1..9) {
-            val col = mutableListOf(0,0,0,0,5,6,7,8,9)
+            val col = mutableListOf(0, 0, 0, 0, 5, 6, 7, 8, 9)
             mutableList.add(col)
         }
         val board = Board(mutableList)
@@ -34,7 +34,7 @@ class BoardTest {
     fun isChangedResolvedTest() {
         val mutableList = mutableListOf<MutableList<Int>>()
         for (i in 1..9) {
-            val col = mutableListOf(0,0,0,0,5,6,7,8,9)
+            val col = mutableListOf(0, 0, 0, 0, 5, 6, 7, 8, 9)
             mutableList.add(col)
         }
         val board = Board(mutableList)
@@ -50,7 +50,7 @@ class BoardTest {
     fun isChangedResetTest() {
         val mutableList = mutableListOf<MutableList<Int>>()
         for (i in 1..9) {
-            val col = mutableListOf(0,0,0,0,5,6,7,8,9)
+            val col = mutableListOf(0, 0, 0, 0, 5, 6, 7, 8, 9)
             mutableList.add(col)
         }
         val board = Board(mutableList)
@@ -70,7 +70,7 @@ class BoardTest {
     fun isChangedCandidateRemovedTest() {
         val mutableList = mutableListOf<MutableList<Int>>()
         for (i in 1..9) {
-            val col = mutableListOf(0,0,0,0,5,6,7,8,9)
+            val col = mutableListOf(0, 0, 0, 0, 5, 6, 7, 8, 9)
             mutableList.add(col)
         }
         val board = Board(mutableList)
@@ -86,7 +86,7 @@ class BoardTest {
     fun isChangedCandidateNotRemovedTest() {
         val mutableList = mutableListOf<MutableList<Int>>()
         for (i in 1..9) {
-            val col = mutableListOf(0,0,0,0,5,6,7,8,9)
+            val col = mutableListOf(0, 0, 0, 0, 5, 6, 7, 8, 9)
             mutableList.add(col)
         }
         val board = Board(mutableList)
@@ -102,11 +102,11 @@ class BoardTest {
     fun cloneTest() {
         val mutableList = mutableListOf<MutableList<Int>>()
         for (i in 1..9) {
-            val col = mutableListOf(0,2,0,4,0,6,7,8,9)
+            val col = mutableListOf(0, 2, 0, 4, 0, 6, 7, 8, 9)
             mutableList.add(col)
         }
         val board = Board(mutableList)
-        val board2 :Board = board.clone() as Board
+        val board2: Board = board.clone() as Board
         assertFalse(board == board2)
         for (row in 0..8) {
             for (col in 0..8) {
@@ -115,16 +115,79 @@ class BoardTest {
                 val b2List = board2.rows[row][col].candidateList
                 assertEquals(b1List.size, b2List.size)
                 println("$row : $col")
-                b1List.forEach{print(it)}
+                b1List.forEach { print(it) }
                 println()
                 b1List.add(100)
-                b1List.forEach{print(it)}
+                b1List.forEach { print(it) }
                 println()
-                b2List.forEach{print(it)}
+                b2List.forEach { print(it) }
                 println()
                 assertNotEquals(b1List.size, b2List.size)
             }
         }
     }
 
+    @Test
+    fun testIsInconsistentRow() {
+        val mutableList = mutableListOf<MutableList<Int>>()
+        mutableList.add(mutableListOf(1, 0, 0, 0, 0, 0, 0, 0, 1))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        val board = Board(mutableList)
+        assert(board.isInconsistent)
+    }
+
+    @Test
+    fun testIsInconsistent() {
+        val mutableList = mutableListOf<MutableList<Int>>()
+        mutableList.add(mutableListOf(1, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        val board = Board(mutableList)
+        assertFalse(board.isInconsistent)
+    }
+
+    @Test
+    fun testIsInconsistentCol() {
+        val mutableList = mutableListOf<MutableList<Int>>()
+        mutableList.add(mutableListOf(1, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(1, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        val board = Board(mutableList)
+        assert(board.isInconsistent)
+    }
+
+    @Test
+    fun testIsInconsistentBlock() {
+        val mutableList = mutableListOf<MutableList<Int>>()
+        mutableList.add(mutableListOf(1, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 1, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        val board = Board(mutableList)
+        assert(board.isInconsistent)
+    }
 }

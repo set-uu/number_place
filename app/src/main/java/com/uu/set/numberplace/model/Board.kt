@@ -18,6 +18,7 @@ class Board() : Serializable, Cloneable {
     constructor(data: MutableList<MutableList<Int>>) : this() {
         this.rows = initRows(data = data)
         updateAllCell()
+        resetIsChanged()
     }
 
     val isChanged: Boolean
@@ -30,16 +31,24 @@ class Board() : Serializable, Cloneable {
             return false
         }
 
-    val hasNoCandidateCell:Boolean
-    get() {
-        for (row in 0..8) {
-            for (col in 0..8) {
-                val cell = rows[row][col]
-                if (cell.resolve == 0 && cell.candidateList.isEmpty()) return true
-            }
+    /**
+     * 盤面に矛盾がないかチェックする
+     */
+    val isInconsistent: Boolean
+        get() {
+            return hasRowInconsistent() || hasColInconsistent() || hasBlockInconsistent()
         }
-        return false
-    }
+
+    val hasNoCandidateCell: Boolean
+        get() {
+            for (row in 0..8) {
+                for (col in 0..8) {
+                    val cell = rows[row][col]
+                    if (cell.resolve == 0 && cell.candidateList.isEmpty()) return true
+                }
+            }
+            return false
+        }
 
     lateinit var rows: MutableList<MutableList<Cell>>
     var resolveStatus: String = ""
@@ -102,6 +111,67 @@ class Board() : Serializable, Cloneable {
                 this.rows[row][col].isChanged = false
             }
         }
+    }
+
+    /**
+     * 同じ行に矛盾があるかチェックする
+     */
+    private fun hasRowInconsistent(): Boolean {
+        for (row in 0..8) {
+            for (col in 0..8) {
+                val baseCell = this.rows[row][col]
+                if (baseCell.resolve != 0) {
+                    for (diffCol in col + 1..8) {
+                        if (baseCell.resolve == this.rows[row][diffCol].resolve) return true;
+                    }
+                }
+            }
+        }
+        return false
+    }
+
+    /**
+     * 同じ列に矛盾があるかチェックする
+     */
+    private fun hasColInconsistent(): Boolean {
+        for (col in 0..8) {
+            for (row in 0..8) {
+                val baseCell = this.rows[row][col]
+                if (baseCell.resolve != 0) {
+                    for (diffRow in row + 1..8) {
+                        if (baseCell.resolve == this.rows[diffRow][col].resolve) return true;
+                    }
+                }
+            }
+        }
+        return false
+    }
+
+    /**
+     * 同じブロックに矛盾があるかチェックする
+     */
+    private fun hasBlockInconsistent(): Boolean {
+        BlockPositions.values().forEach {
+            for (row in 0..2) {
+                for (col in 0..2) {
+                    val baseCell = this.rows[it.row + row][it.col + col]
+                    if (baseCell.resolve != 0) {
+                        for (diffRow in 0..2) {
+                            for (diffCol in 0..2) {
+                                val diffCell = this.rows[it.row + diffRow][it.col + diffCol]
+                                if (baseCell.row != diffCell.row &&
+                                    baseCell.col != diffCell.col &&
+                                    baseCell.resolve == diffCell.resolve
+                                ) {
+                                    return true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

@@ -163,6 +163,26 @@ class CalculateTest {
     fun testCalcError() {
         // 前提が間違っていて解けない問題
         val mutableList = mutableListOf<MutableList<Int>>()
+        mutableList.add(mutableListOf(1, 0, 0, 0, 0, 0, 0, 0, 1))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        mutableList.add(mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+        val board = Board(mutableList)
+        assert(board.isInconsistent)
+        val result = Calculate().calc(board)
+        println(result.boardList.last())
+        Assert.assertEquals(ResolveStatus.NotResolved, result.resolveStatus)
+    }
+
+    @Test
+    fun testCalcError2() {
+        // 前提が間違っていて解けない問題
+        val mutableList = mutableListOf<MutableList<Int>>()
         mutableList.add(mutableListOf(3, 8, 1, 6, 0, 0, 0, 2, 7))
         mutableList.add(mutableListOf(1, 6, 0, 0, 0, 4, 8, 0, 0))
         mutableList.add(mutableListOf(0, 0, 4, 7, 5, 0, 0, 6, 1))
